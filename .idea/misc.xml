@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/JHLIM/AndroidStudioProjects/fastcampus_15/app/src/main/res/drawable/top_radius_white_background.xml" value="0.1" />
         <entry key="..\:/Users/JHLIM/AndroidStudioProjects/fastcampus_15/app/src/main/res/layout/activity_main.xml" value="0.22735507246376813" />
+        <entry key="..\:/Users/JHLIM/AndroidStudioProjects/fastcampus_15/app/src/main/res/layout/bottom_ssheet.xml" value="0.24818840579710144" />
       </map>
     </option>
   </component>
