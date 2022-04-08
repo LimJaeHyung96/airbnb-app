@@ -1,16 +1,24 @@
 package com.example.fastcampus_15
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var naverMap: NaverMap
-    private lateinit var locationSource : FusedLocationSource
+    private lateinit var locationSource: FusedLocationSource
     private val mapView: MapView by lazy {
         findViewById(R.id.mapView)
     }
@@ -42,6 +50,42 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         marker.position = LatLng(37.57986, 126.97711)
         marker.map = naverMap
 
+        getHouseListFromAPI()
+
+    }
+
+    private fun getHouseListFromAPI() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://run.mocky.io/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        retrofit.create(HouseService::class.java).also {
+            it.getHouseList()
+                .enqueue(object : Callback<HouseDto> {
+                    override fun onResponse(call: Call<HouseDto>, response: Response<HouseDto>) {
+                        if (response.isSuccessful.not()) {
+                            return
+                        }
+
+                        response.body()?.let { dto ->
+                            dto.items.forEach { houseModel ->
+                                val marker = Marker()
+                                marker.position = LatLng(houseModel.lat, houseModel.lng)
+                                marker.map = naverMap
+                                marker.tag = houseModel.id
+                                marker.icon = MarkerIcons.BLACK
+                                marker.iconTintColor = Color.RED
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<HouseDto>, t: Throwable) {
+
+                    }
+
+                })
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -51,12 +95,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if(requestCode != LOCATION_PERMISSION_REQUEST_CODE){
+        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return
         }
 
-        if(locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            if(!locationSource.isActivated){
+        if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+            if (!locationSource.isActivated) {
                 naverMap.locationTrackingMode = LocationTrackingMode.None
             }
             return
