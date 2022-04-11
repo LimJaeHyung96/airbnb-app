@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="naver_map_client_id">use your naver map api key</string>
+    <string name="naver_map_client_id">your api key</string>
 </resources>
