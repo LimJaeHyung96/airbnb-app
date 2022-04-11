@@ -21,7 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:gravity="center"
-        android:text="여러 개의 숙소"
+        android:text="몇 개의 숙소?"
         android:textColor="@color/black"
         android:textSize="15sp"
         android:textStyle="bold"
